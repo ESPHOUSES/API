@@ -68,7 +68,7 @@ try {
 		'data' => NULL,
 	];
 } finally {
-	header("HTTP/1.1 " . $result['success'] ? '200' : '500' . " " . $result['message']);
+	header("HTTP/1.1 " . ($result['success'] ? '200' : '500') . " " . $result['message']);
 	echo json_encode($result);
 }
 ?>
