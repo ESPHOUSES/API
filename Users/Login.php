@@ -13,7 +13,8 @@ error_reporting(E_ALL);
 setlocale(LC_ALL, "es_ES");
 date_default_timezone_set('Europe/Madrid');
 ini_set('max_execution_time', 0);
-//header('Content-type: text/html; charset=utf-8');
+
+header('Content-type: text/json; charset=utf-8');
 
 
 require_once '/home/esphouse/crmesphouses.com/src/configuration.php';
@@ -24,21 +25,22 @@ $User = new Users;
 if (isset($_GET['accessKey'])){
 	$User->__set('accesskey', $_GET['accessKey']);
 }else{
-	die();
+	exit('err');
 }
 
 if (isset($_GET['user_name'])){
 	$User->__set('user_name', $_GET['user_name']);
 }else{
-	die();
+	exit('err');
 }
 
-//Get Challenge
+if (!$User->login(false)) {
+	exit('err');
+}
 
-//LOGIN
+if ($User->retrieveViaId($User->__get('sessionId'))){
+	echo json_encode($User->data);
+}else{
+	exit('err');
+}
 
-if (!$User->login(false))
-	exit('Invalid AUTH BOT');
-
-$User->retrieveViaId($User->__get('sessionId'));
-echo $User;
