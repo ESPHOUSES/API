@@ -17,4 +17,44 @@ ini_set('max_execution_time', 0);
 
 
 require_once '/home/esphouse/crmesphouses.com/src/configuration.php';
-include_once 'Property/Property.php';
+include_once '/home/esphouse/crmesphouses.com/src/Property/Property.php';
+
+try {
+
+	//Creamos la clase Usuario
+	$User = new Users;
+
+	//Comprobamos que nos hayan pasado el nombre de usuario
+	if (isset($_POST['userId'])) {
+		//Lo asignamos a la clase
+		$User->__set('id', $_POST['userId']);
+	} else {
+		//Devolvemos excepcion
+		throw new Exception('userId not recieved');
+	}
+
+
+	//Comprobamos que nos hayan pasado el accessKey
+	if (isset($_POST['sessionId'])) {
+		//Probamos a recoger los datos del Usuario con la sessionId
+		if (!$User->retrieveViaId($_POST['sessionId'])) {
+			//Devolvemos excepcion
+			throw new Exception('sessionId not works');
+		}
+	} else {
+		//Devolvemos excepcion
+		throw new Exception('sessionId not recieved');
+	}
+
+
+} catch (Exception $error) {
+	$result = [
+		'success' => FALSE,
+		'message' => $error->getMessage(),
+		'data' => NULL,
+	];
+} finally {
+	header("HTTP/1.1 " . ($result['success'] ? '200' : '500') . " " . $result['message']);
+	echo json_encode($result);
+}
+?>
