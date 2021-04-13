@@ -21,30 +21,26 @@ include_once '/home/esphouse/crmesphouses.com/src/Property/Property.php';
 
 try {
 
-	//Creamos la clase Usuario
-	$User = new Users;
-
-	//Comprobamos que nos hayan pasado el nombre de usuario
-	if (isset($_POST['userId'])) {
-		//Lo asignamos a la clase
-		$User->__set('id', $_POST['userId']);
-	} else {
-		//Devolvemos excepcion
-		throw new Exception('userId not recieved');
-	}
-
-
-	//Comprobamos que nos hayan pasado el accessKey
 	if (isset($_POST['sessionId'])) {
-		//Probamos a recoger los datos del Usuario con la sessionId
-		if (!$User->retrieveViaId($_POST['sessionId'])) {
-			//Devolvemos excepcion
-			throw new Exception('sessionId not works');
-		}
+		//Lo asignamos
+		$sessionId=$_POST['sessionId'];
 	} else {
 		//Devolvemos excepcion
 		throw new Exception('sessionId not recieved');
 	}
+
+	$propertyData=json_decode($_POST['propertyData']);
+
+	$Property=new Property;
+
+	foreach ($propertyData as $key=> $value){
+		$Property->__set($key, $value);
+	}
+
+	echo json_encode($Property->data);
+
+	die();
+
 
 
 } catch (Exception $error) {
