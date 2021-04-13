@@ -23,25 +23,35 @@ try {
 
 	if (isset($_POST['sessionId'])) {
 		//Lo asignamos
-		$sessionId=$_POST['sessionId'];
+		$sessionId = $_POST['sessionId'];
 	} else {
 		//Devolvemos excepcion
 		throw new Exception('sessionId not recieved');
 	}
 
-	$propertyData=json_decode($_POST['propertyData']);
+	if (isset($_POST['propertyData'])) {
+		//Lo asignamos
+		$propertyData = json_decode($_POST['propertyData'], TRUE);
+	} else {
+		//Devolvemos excepcion
+		throw new Exception('propertyData not recieved');
+	}
 
-	$Property=new Property;
+	$Property = new Property;
 
-	foreach ($propertyData as $key=> $value){
+	foreach ($propertyData as $key => $value) {
 		$Property->__set($key, $value);
 	}
 
-	echo json_encode($Property->data);
-
-	die();
-
-
+	if ($Property->save($sessionId)) {
+		$result = [
+			'success' => TRUE,
+			'message' => 'Saved',
+			'data' => $Property->data,
+		];
+	} else {
+		throw new Exception('Property not saved');
+	}
 
 } catch (Exception $error) {
 	$result = [
