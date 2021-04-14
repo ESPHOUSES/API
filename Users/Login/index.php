@@ -51,7 +51,7 @@ try {
 			$result = [
 				'success' => TRUE,
 				'message' => 'Logged',
-				'data' => [
+				'result' => [
 					'id' => $User->__get('id'),
 					'sessionId' => $User->__get('sessionId'),
 				],
@@ -65,7 +65,7 @@ try {
 	$result = [
 		'success' => FALSE,
 		'message' => $error->getMessage(),
-		'data' => NULL,
+		'result' => NULL,
 	];
 } finally {
 	header("HTTP/1.1 " . ($result['success'] ? '200' : '500') . " " . $result['message']);

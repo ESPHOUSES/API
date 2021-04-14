@@ -47,7 +47,7 @@ try {
 		$result = [
 			'success' => TRUE,
 			'message' => 'Saved',
-			'data' => $Property->data,
+			'result' => $Property->data,
 		];
 	} else {
 		throw new Exception('Property not saved');
@@ -57,7 +57,7 @@ try {
 	$result = [
 		'success' => FALSE,
 		'message' => $error->getMessage(),
-		'data' => NULL,
+		'result' => NULL,
 	];
 } finally {
 	header("HTTP/1.1 " . ($result['success'] ? '200' : '500') . " " . $result['message']);
